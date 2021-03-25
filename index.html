@@ -67,11 +67,15 @@
                 font-size: 5vh;
                 transition: 1s;
             }
+            h3:hover {
+                letter-spacing: 5px;
+            }
             h2:hover {
                 letter-spacing: 5px;
             }
             p {
                 text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
             }
             @media screen and (max-width:750px){
                 .weee {
@@ -89,12 +93,83 @@
                 text-align: center;
                 }
             }
+            h3 {
+                text-align: left;
+                transition: 2s;
+                color: purple;;
+            }
+            .flex {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            #lol1, #lol2, #lol3 {
+                background-color: rgb(146, 98, 146);
+                width: 30%;
+                height: fit-content;
+                font-size: 200%;
+                text-align: center;
+
+            }
+            #lol1 {
+                animation-name: lol1;
+                animation-duration: 3s;
+                transition: 1s;
+                animation-iteration-count: infinite;
+            }
+            #lol2 {
+                animation-name: lol2;
+                transition: 1s;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+            #lol3 {
+                animation-name: lol3;
+                transition: 1s;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+            @keyframes lol1 {
+                16% {background-color: lightblue;}
+                32% {background-color: rgb(146, 98, 146);}
+            }
+            @keyframes lol2 {
+                16% {background-color:rgb(146, 98, 146)}
+                32% {background-color: rgb(146, 98, 146);}
+                48% {background-color: lightblue;}
+                64% {background-color: rgb(146, 98, 146);}
+            }
+            @keyframes lol3 {
+                16% {background-color: rgb(146, 98, 146);}
+                32% {background-color: rgb(146, 98, 146);}
+                48% {background-color: rgb(146, 98, 146);}
+                64% {background-color: rgb(146, 98, 146);}
+                80% {background-color: lightblue;}
+                96% {background-color: rgb(146, 98, 146);}
+            }
+            @media (max-width:840px) {
+                #lol1, #lol2, #lol3 {
+                    font-size: 25px;
+                }
+            
+            }
+            @media (max-width:526px){
+                #lol1, #lol2, #lol3{
+                    font-size: 20px;
+                }
+            }
+            @media (max-width:392px){
+                #lol1, #lol2, #lol3{
+                    font-size: 15px;
+                }
+            }
         </style>
     </head>
     <body>
         <nav>
             <div id="xd">
-                <h3>Daily Dose of Memes</h3>
+                <h3 style="color: whitesmoke;">Daily Dose of Memes</h3>
             </div>
             <ul class="weee">
                 <li class="lol"><a href="dailymemes.html">Memes</a></li>
@@ -106,5 +181,11 @@
         <h2>Introducing ourselves</h2>
         <p style="font-size: 20px; color: rgb(24, 24, 24); font-family: Arial, Helvetica, sans-serif;">Welcome! This is the Webpage of Daily Dose of Memes Viber. Try it out, you can't lose anything! The only thing you'll need is <a href="https://www.viber.com/" style="color: rgb(253, 177, 11);">Viber</a>!<br>Now what are you waiting for? Dive into our memes in the memes section, or join our group.</p>
         <p style="font-size: 15px; color: black; font-family: Arial, Helvetica, sans-serif; border-bottom: rgb(54, 54, 54)  2px solid;">(We'd appriciate it)</p>
+        <h3 style="font-size: 30px; text-align: center;">Our history</h3>
+        <div class="flex">
+            <p id="lol1">The group was created: 18. 10. (October) 2020, Hungary.</p>
+            <p id="lol2">We applied 3 staff members (same day).</p>
+            <p id="lol3">We reached 40 members! (there are 39 members right now): 13. February 2021.</p>
+        </div>
     </body>
 </html>
