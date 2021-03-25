@@ -7,7 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
         <style>
             ul > li{
-                background-color: grey;
+                background-color: rgb(158, 95, 218);
                 color: whitesmoke;
                 height: 33vh;
                 font-size: 15vh;
@@ -19,15 +19,49 @@
                 font-size: 10vh;
             }
             body {
-                background-color: gray;
+                background-color: rgb(158, 95, 218);
             }
+            #lol1 {
+                animation-name: lol1;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+            #lol2 {
+                animation-name: lol2;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+            #lol3 {
+                animation-name: lol3;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+            @keyframes lol1 {
+                16% {background-color: rgb(158, 95, 218);}
+                32% {background-color: rgb(146, 98, 146);}
+            }
+            @keyframes lol2 {
+                16% {background-color:rgb(146, 98, 146)}
+                32% {background-color: rgb(146, 98, 146);}
+                48% {background-color: rgb(158, 95, 218);}
+                64% {background-color: rgb(146, 98, 146);}
+            }
+            @keyframes lol3 {
+                16% {background-color: rgb(146, 98, 146);}
+                32% {background-color: rgb(146, 98, 146);}
+                48% {background-color: rgb(146, 98, 146);}
+                64% {background-color: rgb(146, 98, 146);}
+                80% {background-color: rgb(158, 95, 218);}
+                96% {background-color: rgb(146, 98, 146);}
+            }
+
         </style>
     </head>
     <body>
         <ul class="weee">
-            <li class="lol"><a href="dailymemes.html">Memes</a></li>
-            <li class="lol"><a href="admins.html">Admins</a></li>
-            <li class="lol"><a href="aboutthegroup.html">Community</a></li>
+            <li class="lol" id="lol1"><a href="dailymemes.html">Memes</a></li>
+            <li class="lol" id="lol2"><a href="admins.html">Admins</a></li>
+            <li class="lol" id="lol3"><a href="aboutthegroup.html">Community</a></li>
         </ul>
     </body>
 </html>
