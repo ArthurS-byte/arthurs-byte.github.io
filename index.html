@@ -22,7 +22,7 @@
                 text-transform: uppercase;
                 letter-spacing: 5px;
                 font-size: 4vh;
-                margin-top: 3vh;
+                margin-top: 2vh;
                 margin-bottom: 1vh;
                 font-weight: bold;
                 transition: 0s;
@@ -33,6 +33,7 @@
                 justify-content: space-around;
                 min-height: 8vh;
                 align-items: center;
+                height: fit-content;
             }
             ul {
                 display: flex;
@@ -67,14 +68,13 @@
                 letter-spacing: 2px ;
                 margin: 1vh; 
                 font-size: 5vh;
-                transition: 1s;
             }
  
             p {
                 text-align: center;
                 font-family: Arial, Helvetica, sans-serif;
             }
-            @media screen and (max-width:750px){
+            @media screen and (max-width:754px){
                 .weee {
                     display: none;
                 }
@@ -95,7 +95,6 @@
             }
             h3 {
                 text-align: left;
-                transition: 2s;
                 color: purple;;
             }
             .flex {
@@ -117,18 +116,15 @@
             #lol1 {
                 animation-name: lol1;
                 animation-duration: 3s;
-                transition: 1s;
                 animation-iteration-count: infinite;
             }
             #lol2 {
                 animation-name: lol2;
-                transition: 1s;
                 animation-duration: 3s;
                 animation-iteration-count: infinite;
             }
             #lol3 {
                 animation-name: lol3;
-                transition: 1s;
                 animation-duration: 3s;
                 animation-iteration-count: infinite;
             }
@@ -178,13 +174,27 @@
                 font-weight: 500;
                 font-family: Nunito,cursive;
             }
+            .question {
+                text-align: center;
+                font-family: Nunito, Times, serif;
+                border-bottom: blueviolet dotted 1px;
+                font-weight: bold;
+                font-size: 15px;
+            }
+            .answer {
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight: lighter;
+                font-size:15px;
+                border-bottom: solid purple 2.5px;
+            }
         </style>
     </head>
     <body>
         <nav>
-            <div id="xd">
-                <h3 style="color: whitesmoke;">Daily Dose of Memes</h3>
-            </div>
+                <div id="xd">
+                    <h3 style="color: whitesmoke;">Daily Dose of Memes</h3>
+                </div>
             <ul class="weee">
                 <li class="lol"><a href="dailymemes.html">Memes</a></li>
                 <li class="lol"><a href="admins.html">Administrators</a></li>
@@ -195,7 +205,7 @@
         <h2>Introducing ourselves</h2>
         <p style="font-size: 22.5px; color: rgb(24, 24, 24); font-family: Nunito, Helvetica, sans-serif;text-align: left;">Welcome! This is the Webpage of Daily Dose of Memes Viber. Try it out, you can't lose anything! The only thing you'll need is <a href="https://www.viber.com/" style="color: rgb(253, 177, 11);">Viber</a>!<br>Now what are you waiting for? Dive into our memes in the memes section, or join our group.</p>
         <p style="font-size: 15px; color: black; font-family: 'Times New Roman', Times, serif; border-bottom: rgb(54, 54, 54)  1px dashed;font-weight: 400;">(We'd appriciate it)</p>
-        <h3 style="font-size: 30px; text-align: left;font-size: 5vh;transition: 1s;">Our history</h3>
+        <h3 style="font-size: 30px; text-align: left;font-size: 5vh;transition: 1s; font-family: Arial, Helvetica, sans-serif;">Our history</h3>
         <br>
         <ol class="flex">
             <p id="lol1">The group was created: <br> 18. 10. 2020, Hungary.</p>
@@ -206,5 +216,15 @@
             <p id="note" style="text-align: left;">Note:</p>
             <p style="text-align: left;border-bottom: rgb(54, 54, 54) 1px dashed;font-family: Nunito;">You can make us put more content here, by applying to staff or just simply joining <a href="https://invite.viber.com/?g2=AQA5gjSQDYrqcUxO%2FeROvB6CQT4FPbe%2F0%2BEIYhbLgjuKnZH71Y%2FztLJwJml2X3UY" id="link">Daily Dose of Memes</a></p>
         </div>
+        <h2 style="font-size: px; text-align: center;font-family:  Arial, Helvetica, sans-serif;">We interviewed one of our admins about the community. Check it out below!</h3>
+            <div id="interview">
+                <p class="question">Why did you join? How did the community reach you?</p>
+                <p class="answer">A meme, a Manchester United one, came to me and I saw it's forwarded from a community. </p>
+                <p class="question">Why did you want to become an admin?</p>
+                <p class="answer">I wanted to become an admin right when I joined so I can be part of the meme senders.</p>
+                <p class="question">Is it hard to send high quality memes every day, or does the team manage it easily?</p>
+                <p class="answer"> There are enough admins and the memes are usually great, but sometimes we are all busy or forget something but we make it up right after.</p>
+            </div>
+        <p style="background-color: rgb(158, 95, 218); color: whitesmoke;"> Contact us: <br> e-mail: <br> ddomviber@gmail.com</p>
     </body>
 </html>
