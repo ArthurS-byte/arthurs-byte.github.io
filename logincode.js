@@ -43,4 +43,33 @@ document.getElementById('showPasswordCheckbox').addEventListener('change', funct
   } else {
     passwordInput.type = 'password';  // Hide password
   }
+
+});
+
+const input = document.getElementById('username');
+
+input.addEventListener('invalid', function() {
+  if (input.validity.valueMissing) {
+    input.setCustomValidity('Kérlek, add meg a felhasználóneved!');
+  } else {
+    input.setCustomValidity('');
+  }
+});
+
+input.addEventListener('input', function() {
+  input.setCustomValidity(''); // Clear custom message on input
+});
+
+const passwordInput = document.getElementById('password');
+
+passwordInput.addEventListener('invalid', function() {
+  if (passwordInput.validity.valueMissing) {
+    passwordInput.setCustomValidity('Kérlek, add meg a jelszavad!');
+  } else {
+    input.setCustomValidity('');
+  }
+});
+
+input.addEventListener('input', function() {
+  input.setCustomValidity(''); // Clear custom message on input
 });
