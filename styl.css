@@ -1,0 +1,17 @@
+.btn-custom-red {
+    background-color: #8B0000 !important;  /* dark red background */
+    border-color: #8B0000 !important;      /* dark red border */
+    color: white !important;                /* white text */
+}
+.btn-custom-red:hover, 
+.btn-custom-red:focus, 
+.btn-custom-red:active {
+    background-color: #660000 !important;  /* darker red on hover */
+    border-color: #660000 !important;
+    color: white !important;
+}
+
+.card-header {
+    background-color: #8B0000 !important;
+    color: white !important;
+}
