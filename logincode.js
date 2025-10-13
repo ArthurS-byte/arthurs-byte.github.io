@@ -43,7 +43,6 @@ document.getElementById('showPasswordCheckbox').addEventListener('change', funct
   } else {
     passwordInput.type = 'password';  // Hide password
   }
-
 });
 
 const input = document.getElementById('username');
@@ -66,10 +65,10 @@ passwordInput.addEventListener('invalid', function() {
   if (passwordInput.validity.valueMissing) {
     passwordInput.setCustomValidity('Kérlek, add meg a jelszavad!');
   } else {
-    input.setCustomValidity('');
+    passwordInputinput.setCustomValidity('');
   }
 });
 
 input.addEventListener('input', function() {
-  input.setCustomValidity(''); // Clear custom message on input
+  passwordInput.setCustomValidity(''); // Clear custom message on input
 });
