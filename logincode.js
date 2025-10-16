@@ -6,8 +6,8 @@ const users = [
         redirectPage: 'terminalinbox.html'   // page for Terminal user
     },
     {
-        username: 'rendszergazda',
-        password: 'abcd',
+        username: 'szantohuba',
+        password: '569274FACE',
         displayName: 'Szántó Huba',
         redirectPage: 'rendszergazda.html'  // page for rendszergazda user
     }
@@ -72,3 +72,4 @@ passwordInput.addEventListener('invalid', function() {
 input.addEventListener('input', function() {
   passwordInput.setCustomValidity(''); // Clear custom message on input
 });
+
