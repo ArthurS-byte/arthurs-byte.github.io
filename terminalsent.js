@@ -1,17 +1,17 @@
 const sentMails = [
   {
-    title: 'Első elküldött üzenet',
-    content: 'Ez az első elküldött üzenet tartalma.',
-    from: 'Feladó neve',        // sender
-    to: 'Email címzett',
-    time: '2025.10.16. 10:00',
+    title: 'Parancsok',
+    content: 'Szia,<br> Küldöm a parancsokat mint ígértem:',
+    from: 'Terminal',        // sender
+    to: 'Karácsonyi Mária',
+    time: '2025.10.9. 18:23',
     unread: false // Sent mails generally are "read"
   },
   {
-    title: 'Második üzenet',
-    content: 'Második levél részleteinek szövege.',
-    from: 'Feladó neve',
-    to: 'Másik címzett',
+    title: 'Biloba rendszer kezelése',
+    content: 'Kedves Tibor!<br>A biloba védelmi rendszer beiktatása jelentős kockázatokkal jár. Emiatt szeretném hogyha áttekintenéd az ezzel kapcsolatos parancsokat amiket átküldtem a fiókomról.<br>U.I.: Sok szerencsét a panaszokhoz a felmondásom után<br>Üdv',
+    from: 'Terminal',
+    to: 'Hegedűs Tibor',
     time: '2025.10.16. 15:23',
     unread: false
   }
@@ -74,3 +74,4 @@ function showError() {
 
 // Render all sent mails on page load
 renderSentMails(sentMails);
+
