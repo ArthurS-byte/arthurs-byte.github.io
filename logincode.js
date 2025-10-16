@@ -3,7 +3,7 @@ const users = [
         username: 'Terminal',
         password: '1234',
         displayName: 'Terminal User',  
-        redirectPage: 'terminal.html'   // page for Terminal user
+        redirectPage: 'terminalinbox.html'   // page for Terminal user
     },
     {
         username: 'rendszergazda',
