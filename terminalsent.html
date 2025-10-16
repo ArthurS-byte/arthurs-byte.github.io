@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biloba - Bejövő levelek</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    :root {
+      --biloba-red: #8B0000;
+    }
+    /* Color theme */
+    .bg-primary, .btn-primary, .active, .badge.bg-primary {
+      background-color: var(--biloba-red) !important;
+      border-color: var(--biloba-red) !important;
+    }
+    .btn-primary:hover {
+      background-color: #600000 !important;
+    }
+
+    /* Navbar */
+    .navbar-dark .navbar-brand,
+    .navbar-dark .navbar-nav .nav-link,
+    .navbar-dark .navbar-text {
+      color: #fff !important;
+    }
+    .navbar-dark .navbar-brand:hover {
+      color: #f0dcdc !important;
+    }
+
+    /* Sidebar navigation */
+    .sidebar .nav-link {
+      color: #000 !important;
+      transition: all 0.2s ease;
+    }
+    .sidebar .nav-link:hover {
+      color: var(--biloba-red) !important;
+      background-color: #f7e7e7 !important;
+    }
+    .sidebar .nav-link.active {
+      color: var(--biloba-red) !important;
+      background-color: #f1d6d6 !important;
+    }
+    
+    /* Buttons and forms */
+    .btn-outline-light {
+      color: #fff;
+      border-color: #fff;
+    }
+    .btn-outline-light:hover {
+      background-color: #fff;
+      color: var(--biloba-red);
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--biloba-red);
+      box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+    }
+
+    /* Dropdown icon always visible */
+    .dropdown .btn {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Modal style */
+    .modal-header {
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="terminalinbox.html">
+        <img src="images/logo_sotet.png" alt="Biloba Logo" style="height: 50px; width: 50px; margin-right: 10px;" />
+        <h3>Biloba</h3>
+        </a>
+      <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+        <span class="navbar-text me-3" id="userDisplay">Üdv, "Terminal"</span>
+        <!-- User dropdown always visible -->
+        <div class="dropdown">
+          <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-user"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="index.html" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> Kijelentkezés
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar Menu -->
+      <nav class="col-md-3 col-lg-2 sidebar pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="terminalinbox.html">
+              <i class="fas fa-inbox me-2"></i> Bejövő levelek
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="terminalsent.html">
+              <i class="fas fa-paper-plane me-2"></i> Elküldött levelek
+            </a>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link btn btn-link text-start" data-bs-toggle="modal" data-bs-target="#composeModal">
+              <i class="fas fa-edit me-2"></i> Új üzenet
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Inbox Section -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Bejövő levelek</h1>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#composeModal">
+            <i class="fas fa-plus me-2"></i> Új üzenet
+          </button>
+        </div>
+
+        <!-- Message List -->
+        <div id="messagesList" class="messages-container">
+          <p class="text-muted">Nincs új üzenet.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Compose Modal -->
+  <div class="modal fade" id="composeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-edit me-2"></i> Új üzenet írása
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="composeForm">
+            <div class="mb-3">
+              <label for="recipient" class="form-label">Címzett:</label>
+              <select class="form-select" id="recipient" required>
+                <option value="">Rendszer offline</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="subject" class="form-label">Tárgy:</label>
+              <input type="text" class="form-control" id="subject" required />
+            </div>
+            <div class="mb-3">
+              <label for="messageBody" class="form-label">Üzenet:</label>
+              <textarea class="form-control" id="messageBody" rows="6" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+          <button type="button" class="btn btn-primary" onclick="showError()">
+            <i class="fas fa-paper-plane me-2"></i> Küldés
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Message Modal -->
+  <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="messageModalLabel">Message Title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Message content goes here...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="terminalsent.js"></script>
+</body>
+</html>
