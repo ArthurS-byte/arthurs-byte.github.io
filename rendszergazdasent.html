@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elküldött levelek</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<style>
+  :root {
+    --biloba-red: #8B0000;
+  }
+  .bg-primary, .btn-primary, .active, .badge.bg-primary {
+    background-color: var(--biloba-red) !important;
+    border-color: var(--biloba-red) !important;
+  }
+  .btn-primary:hover {
+    background-color: #600000 !important;
+  }
+  .navbar-dark .navbar-brand,
+  .navbar-dark .navbar-nav .nav-link,
+  .navbar-dark .navbar-text {
+    color: #fff !important;
+  }
+  .navbar-dark .navbar-brand:hover {
+    color: #f0dcdc !important;
+  }
+  .sidebar .nav-link {
+    color: #000 !important;
+    transition: all 0.2s ease;
+  }
+  .sidebar .nav-link:hover {
+    color: var(--biloba-red) !important;
+    background-color: #f7e7e7 !important;
+  }
+  .sidebar .nav-link.active {
+    color: var(--biloba-red) !important;
+    background-color: #f1d6d6 !important;
+  }
+  .btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+  }
+  .btn-outline-light:hover {
+    background-color: #fff;
+    color: var(--biloba-red);
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--biloba-red);
+    box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+  }
+  .dropdown .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .unread-dot {
+    height: 10px;
+    width: 10px;
+    background-color: var(--biloba-red);
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 8px;
+  }
+  #letters {
+    margin: 20px 0 0 0;
+  }
+  /* New: red text for message cards */
+  .message-card .card-body {
+    color: #000 !important;
+  }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="images/logo_sotet.png" alt="Biloba Logo" style="height:50px; width:50px; margin-right:10px;" />
+      <h3>Biloba</h3>
+    </a>
+    <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+      <span class="navbar-text me-3" id="userDisplay">Üdv, "Szántó Huba"</span>
+      <div class="dropdown">
+        <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown"><i class="fas fa-user"></i></button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Kijelentkezés</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-3 col-lg-2 sidebar pt-3">
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="rendszergazda.html"><i class="fas fa-inbox me-2"></i> Bejövő levelek</a></li>
+        <li class="nav-item"><a class="nav-link active" href="rendszergazdasent.html"><i class="fas fa-paper-plane me-2"></i> Elküldött levelek</a></li>
+        <li class="nav-item"><button class="nav-link btn btn-link text-start" data-bs-toggle="modal" data-bs-target="#composeModal"><i class="fas fa-edit me-2"></i> Új üzenet</button></li>
+      </ul>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Elküldött levelek</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#composeModal"><i class="fas fa-plus me-2"></i> Új üzenet</button>
+      </div>
+
+      <div id="messagesList" class="messages-container"><p class="text-muted"></p></div>
+      
+      <div id="letters"></div>
+    </main>
+  </div>
+</div>
+
+<div class="modal fade" id="composeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-edit me-2"></i> Új üzenet írása</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="composeForm">
+          <div class="mb-3"><label for="recipient" class="form-label">Címzett:</label><select class="form-select" id="recipient" required><option value="">Rendszer offline</option></select></div>
+          <div class="mb-3"><label for="subject" class="form-label">Tárgy:</label><input type="text" class="form-control" id="subject" required></div>
+          <div class="mb-3"><label for="messageBody" class="form-label">Üzenet:</label><textarea class="form-control" id="messageBody" rows="6" required></textarea></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+        <button type="button" class="btn btn-primary" onclick="showError()"><i class="fas fa-paper-plane me-2"></i> Küldés</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" id="messageModalLabel">Message Title</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">Message content goes here...</div>
+      <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const storageKey = 'biloba_inbox_firstMailShown';
+
+  const newMail = {
+    title: 'Nincs internet kapcsolat',
+    content: 'Úgy tűnik, hogy nincs internet kapcsolatod. Kérlek, ellenőrizd a hálózati beállításaidat, és próbálj újra csatlakozni az internethez. Offline módban csak üzenetek olvasására van lehetőség.',
+    from: 'Feladó neve',
+    time: '2025.10.17. 15:53'
+  };
+
+  const letters = [
+    {
+        title: 'Rendszerleállítási parancsok',
+        content: `A rendszer leállítására a parancsok a következők: <br>/system circuit [elektromos kapcsolók zárása, vezetési sorrendben]<br>/sytem voltage [főáramkör új erőssége voltban],[működtető áramkör új erőssége voltban]<br>Példa: /system circuit CBA BKJ...<br>/sytem voltage 45,65<br>A főáramkört felére, a működtető áramkört negyedére kell kapcsolni leállításhoz! Végső parancs: /system shutdown (ha minden lépés kész)`,
+        from: 'Szántó Huba',
+        to: 'Hegedűs Tibor',
+        time: new Date().toISOString().slice(0, 16).replace('T', '. '),
+        unread: false
+    }
+  ];
+
+  function renderMail(mail) {
+    const messagesList = document.getElementById('messagesList');
+    messagesList.innerHTML = `
+      <div class="card mb-2 message-card" style="cursor:pointer;">
+        <div class="card-body" style="color: var(--biloba-red);">
+          <h5 class="card-title">${mail.title}</h5>
+          <p class="card-text text-truncate" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${mail.content}</p>
+        </div>
+      </div>`;
+    const card = document.querySelector('.message-card');
+    card.addEventListener('click', () => showModal(mail));
+  }
+
+  function showModal(mail) {
+    document.getElementById('messageModalLabel').textContent = mail.title;
+    document.querySelector('#messageModal .modal-body').textContent = mail.content;
+    new bootstrap.Modal(document.getElementById('messageModal')).show();
+  }
+
+  function renderLetters() {
+    const lettersDiv = document.getElementById('letters');
+    lettersDiv.innerHTML = letters.map(letter => `
+      <div class="card mb-2 message-card" style="cursor:pointer;">
+        <div class="card-body" style="color: var(--biloba-red);">
+          <h5 class="card-title">${letter.title}</h5>
+          <p class="card-text text-truncate" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${letter.content}</p>
+          <div>
+            <small class="text-muted">Feladó: ${letter.from}</small><br/>
+            <small class="text-muted">Címzett: ${letter.to}</small><br/>
+            <small class="text-muted">${letter.time}</small>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    Array.from(lettersDiv.querySelectorAll('.message-card')).forEach((card, i) => {
+      card.addEventListener('click', () => showModal(letters[i]));
+    });
+  }
+
+  renderLetters();
+
+  function showError() {
+    const errorDiv = document.getElementById('errorAlert');
+    errorDiv.textContent = 'Nincs internet kapcsolat';
+    errorDiv.classList.remove('d-none');
+    setTimeout(() => errorDiv.classList.add('d-none'), 3000);
+  }
+
+  function logout() { alert('Kijelentkezés (nem működik a példában)'); }
+</script>
+</body>
+</html>
