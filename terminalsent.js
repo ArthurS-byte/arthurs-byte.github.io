@@ -1,7 +1,7 @@
 const sentMails = [
   {
     title: 'Parancsok',
-    content: 'Szia,<br> Küldöm a parancsokat mint ígértem:',
+    content: 'Szia,<br> Küldöm a parancsokat mint ígértem:<br>/help <br>Megnyitja a súgót. A súgó jelenleg fejlesztés alatt van <br>/exit <br>Kilép a terminálból <br>/clear <br>Törli az összes eddigi kiírást <br>/open <br>Megnyitja az adott fájlt <br>/send  <br>Elküldi az adott fájlt a terminál fiókjába a Biloba üzenetküldő rendszerben, ha van internetelérés. <br>/system <br>Módosítások végrehajtása a tűzfalon. <br>',
     from: 'Terminal',        // sender
     to: 'Karácsonyi Mária',
     time: '2025.10.9. 18:23',
@@ -9,7 +9,7 @@ const sentMails = [
   },
   {
     title: 'Biloba rendszer kezelése',
-    content: 'Kedves Tibor!<br>A biloba védelmi rendszer beiktatása jelentős kockázatokkal jár. Emiatt szeretném hogyha áttekintenéd az ezzel kapcsolatos parancsokat amiket átküldtem a fiókomról.<br>U.I.: Sok szerencsét a panaszokhoz a felmondásom után<br>Üdv',
+    content: 'Kedves Tibor!<br>A biloba védelmi rendszer beiktatása jelentős kockázatokkal jár. Emiatt szeretném hogyha áttekintenéd az ezzel kapcsolatos parancsokat amiket átküldtem a fiókomról.<br>U.I.: Sok szerencsét a panaszokhoz a felmondásom után :p<br>Üdv',
     from: 'Terminal',
     to: 'Hegedűs Tibor',
     time: '2025.10.16. 15:23',
@@ -74,4 +74,5 @@ function showError() {
 
 // Render all sent mails on page load
 renderSentMails(sentMails);
+
 
