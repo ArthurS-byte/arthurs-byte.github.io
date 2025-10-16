@@ -163,7 +163,7 @@
   const letters = [
     {
         title: 'Rendszerleállítási parancsok',
-        content: `A rendszer leállítására a parancsok a következők: <br>/system circuit [elektromos kapcsolók zárása, vezetési sorrendben]<br>/sytem voltage [főáramkör új erőssége voltban],[működtető áramkör új erőssége voltban]<br>Példa: /system circuit CBA BKJ...<br>/sytem voltage 45,65<br>A főáramkört felére, a működtető áramkört negyedére kell kapcsolni leállításhoz! Végső parancs: /system shutdown (ha minden lépés kész)`,
+        content: `A rendszer leállítása érdekében a következő lépéseket kell megtenni:<br>1. /system circuit [elektromos kapcsolók helyes sorrendben leírása]<br>Pl:Gazdaságitól az igazgatóságig: /system circuit AGV APB AFM ATR<br>2. /system voltage [főáramkör új feszültsége],[működtető áramkör új feszültsége]<br>A főáramkört az eredeti feszültség felére, a működtető áramkört a negyedére kell csökkenteni!<br>Pl: Ha főáramkör:100 V, Működtető: 200 V -> /system voltage 50,50<br>3. /system shutdown<br>Ezt a parancsot csak akkor lehet beírni, ha az előző lépésekre pozitív visszajelzést kaptunk!`,
         from: 'Szántó Huba',
         to: 'Hegedűs Tibor',
         time: new Date().toISOString().slice(0, 16).replace('T', '. '),
@@ -222,4 +222,5 @@
 </script>
 </body>
 </html>
+
 
