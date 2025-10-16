@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>biloba terminál</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #000;
+      font-family: "Courier New", Courier, monospace;
+      color: #0f0;
+      font-size: 28px;
+      display: flex;
+      flex-direction: column;
+      outline: none;
+    }
+
+    .hidden { display: none; }
+
+    .password-input {
+      letter-spacing: 10px;
+      text-shadow: 0 0 8px #0f0;
+      font-size: 36px;
+      margin: auto;
+    }
+
+    .error {
+      color: red !important;
+      text-shadow: 0 0 8px red !important;
+    }
+
+    .terminal {
+      flex: 1;
+      background: #000;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #0f0;
+      font-size: 24px;
+      line-height: 1.6;
+      overflow-y: scroll;
+      white-space: pre-wrap;
+      text-shadow: 0 0 8px #0f0;
+    }
+
+    .terminal::-webkit-scrollbar { display: none; }
+    .terminal { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .output { padding-bottom: 50px; }
+
+    .input-line {
+      display: flex;
+      position: fixed;
+      bottom: 10px;
+      left: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .prompt { margin-right: 4px; }
+
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #0f0;
+      font-size: 24px;
+      font-family: inherit;
+      caret-color: #0f0;
+      text-shadow: 0 0 8px #0f0;
+    }
+
+    .system-message {
+      color: red;
+      text-shadow: 0 0 8px red;
+      white-space: pre;
+    }
+
+    /* Bal felső sarok fix szöveg */
+    #cornerLabel {
+      position: fixed;
+      top: 5px;
+      left: 10px;
+      font-size: 18px;
+      color: #0f0;
+      text-shadow: 0 0 8px #0f0;
+      display: none;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Popup overlay */
+    #imagePopupOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    #imagePopup {
+      position: relative;
+      max-width: 90vw;
+      max-height: 80vh;
+      box-shadow: 0 0 15px #0f0;
+    }
+    #imagePopup img {
+      max-width: 100%;
+      max-height: 80vh;
+      display: block;
+      margin: 0 auto;
+    }
+    #imageControls {
+      margin-top: 10px;
+      text-align: center;
+    }
+    #imageControls button {
+      background: #0f0;
+      border: none;
+      color: #000;
+      font-size: 18px;
+      padding: 8px 14px;
+      margin: 0 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: monospace;
+      box-shadow: 0 0 6px #0f0;
+    }
+    #imageControls button:hover {
+      background: #0a0;
+      color: #fff;
+    }
+  </style>
+</head>
+<body tabindex="0">
+  <div id="cornerLabel">.sys/%blb/main_interface <span id="dateTime"></span></div>
+  <div id="passwordScreen" class="password-input">_ _ _ _ _ _</div>
+
+  <div id="terminal" class="terminal hidden">
+    <div class="output" id="output"></div>
+    <div class="input-line" id="inputLine" style="display:none;">
+      <span class="prompt">&gt;&gt; biloba$/</span>
+      <input type="text" id="commandInput" autofocus />
+    </div>
+  </div>
+
+  <!-- Image Popup -->
+  <div id="imagePopupOverlay">
+    <div id="imagePopup">
+      <img id="popupImage" src="" alt="Image"/>
+      <div id="imageControls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+        <button id="closeBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const body = document.body;
+    const passwordScreen = document.getElementById("passwordScreen");
+    const terminal = document.getElementById("terminal");
+    const output = document.getElementById("output");
+    const inputLine = document.getElementById("inputLine");
+    const input = document.getElementById("commandInput");
+    const cornerLabel = document.getElementById("cornerLabel");
+    const promptSymbol = ">> biloba$/";
+    const correctPassword = "biloba";
+    let circuitSuccess = false;
+    let voltageSuccess = false;
+
+    // Updated valid file data:
+    // "abcdef" removed
+    const validFile = "9133966";
+    const validPassword = "a";
+
+    let enteredPassword = "";
+    let bootFinished = false;
+    let openState = 0;
+    let currentFile = "";
+
+    // Image popup elements
+    const imagePopupOverlay = document.getElementById("imagePopupOverlay");
+    const popupImage = document.getElementById("popupImage");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const images = ["img1.png", "img2.png", "img3.png"];
+    let currentImageIndex = 0;
+
+    window.onload = () => body.focus();
+
+    body.addEventListener("keydown", (e) => {
+      if (terminal.classList.contains("hidden")) {
+        if (e.key.length === 1 && enteredPassword.length < 6) {
+          enteredPassword += e.key.toLowerCase();
+        } else if (e.key === "Backspace") {
+          enteredPassword = enteredPassword.slice(0, -1);
+        }
+        updatePasswordDisplay();
+        if (enteredPassword.length === 6) checkPassword();
+      }
+    });
+
+    function updatePasswordDisplay() {
+      let display = "";
+      for (let i = 0; i < 6; i++) {
+        display += enteredPassword[i] ? enteredPassword[i] : "_";
+        if (i < 5) display += " ";
+      }
+      passwordScreen.textContent = display;
+    }
+
+    function checkPassword() {
+      if (enteredPassword === correctPassword) {
+        passwordScreen.classList.add("hidden");
+        terminal.classList.remove("hidden");
+        startBoot();
+      } else {
+        passwordScreen.classList.add("error");
+        setTimeout(() => {
+          passwordScreen.classList.remove("error");
+          enteredPassword = "";
+          updatePasswordDisplay();
+        }, 800);
+      }
+    }
+
+    const bootSteps = [
+      ">> Eszközök felismerése...",
+      ">> Hálózati modul betöltése...",
+      ">> Fájlrendszer indul..."
+    ];
+
+    function typeLine(line, callback, cssClass = null) {
+      const newLine = document.createElement("div");
+      if (cssClass) newLine.classList.add(cssClass);
+      output.appendChild(newLine);
+      let i = 0;
+      (function typeChar() {
+        if (i < line.length) {
+          newLine.textContent += line[i++];
+          setTimeout(typeChar, 20);
+        } else if (callback) callback(newLine);
+        terminal.scrollTop = terminal.scrollHeight;
+      })();
+    }
+
+    function instantLine(text, cssClass = null) {
+      const newLine = document.createElement("div");
+      if (cssClass) newLine.classList.add(cssClass);
+      newLine.textContent = text;
+      output.appendChild(newLine);
+      terminal.scrollTop = terminal.scrollHeight;
+      return newLine;
+    }
+
+    function startBoot() {
+      let i = 0;
+      function next() {
+        if (i < bootSteps.length) {
+          typeLine(bootSteps[i++], (el) => {
+            setTimeout(() => { output.removeChild(el); next(); }, 700);
+          });
+        } else {
+          typeLine(">> A rendszer készen áll.", () => {
+            typeLine(">> A súgó eléréséhez használja a /help parancsot.", () => {
+              output.appendChild(document.createElement("br"));
+              inputLine.style.display = "flex";
+              cornerLabel.style.display = "block";
+              input.focus();
+              bootFinished = true;
+            });
+          });
+        }
+      }
+      next();
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("dateTime").textContent =
+        ` | ${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")} `
+        + `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" && bootFinished && openState === 0) {
+        const command = input.value.trim();
+        if (command) {
+          const newLine = document.createElement("div");
+          newLine.textContent = promptSymbol + command;
+          output.appendChild(newLine);
+
+          if (command === "help") {
+            typeLine("A súgó jelenleg nem elérhető, kérem használja a manuális kézikönyvet!", null, "system-message");
+          } else if (command === "open") {
+            startOpenSequence();
+          } else if (command === "clear") {
+            output.innerHTML = "";
+            instantLine(">> Képernyő törölve.");
+          } else if (command === "exit") {
+            exitSystem();
+        } else if (command.startsWith("system")) {
+            handleSystemCommand(command);
+          } else {
+            typeLine("Helytelen parancs.", null, "system-message");
+          }
+        }
+        input.value = "";
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    });
+
+function handleSystemCommand(command) {
+  const parts = command.split(" ");
+  if (parts.length < 2) {
+    typeLine("Helytelen /system parancs formátum.", null, "system-message");
+    return;
+  }
+
+  const action = parts[1];
+
+  if (action === "circuit") {
+    const circuitStr = parts.slice(2).join(" ");
+    // Expected string exactly:
+    const validCircuit = "CFA CBA CKB FL2 FL1 BKJ ML1 MLF AAB AFM ATR";
+    if (circuitStr === validCircuit) {
+      typeLine("Sikeres áramkörkapcsolás'");
+      circuitSuccess = true;
+    } else {
+      typeLine("Ez az áramkör nem valósítható meg", null, "system-message");
+    }
+
+  } else if (action === "voltage") {
+    const voltageStr = parts.slice(2).join(" ");
+    if (voltageStr === "190,55") {
+      typeLine("Sikeres feszültségváltoztatás");
+      voltageSuccess = true;
+    } else {
+      typeLine("A feszültség nem valósítható meg", null, "system-message");
+    }
+
+  } else if (action === "shutdown") {
+    if (circuitSuccess && voltageSuccess) {
+      typeLine("Rendszer leállítva!!");
+      playSuccessSound();
+    } else {
+      typeLine("Rendszerleállítás feltételei nem adottak", null, "system-message");
+    }
+
+  } else {
+    typeLine("Ismeretlen /system parancs.", null, "system-message");
+  }
+}
+
+function playSuccessSound() {
+  const audio = new Audio("success.mp3");
+  audio.play();
+}
+    function startOpenSequence() {
+      openState = 1;
+      inputLine.style.display = "none";
+      instantLine("-".repeat(40));
+      const filePrompt = instantLine("Kérem írja be a fájl nevét: ");
+      const fileInput = createInlineInput(filePrompt, handleFileNameSubmit);
+      instantLine("-".repeat(40));
+    }
+
+    function createInlineInput(parentEl, callback) {
+      const inlineInput = document.createElement("input");
+      inlineInput.type = "text";
+      Object.assign(inlineInput.style, {
+        background: "transparent",
+        border: "none",
+        outline: "none",
+        color: "#0f0",
+        fontFamily: "Courier New",
+        fontSize: "24px",
+        textShadow: "0 0 8px #0f0"
+      });
+      parentEl.appendChild(inlineInput);
+      inlineInput.focus();
+      inlineInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const value = inlineInput.value.trim();
+          inlineInput.remove();
+          parentEl.textContent += value;
+          callback(value);
+        }
+      });
+      return inlineInput;
+    }
+
+    function handleFileNameSubmit(filename) {
+    const noPasswordFiles = ["kapcsolok", "dekoderel", "levelek", "artemisz", "atrium"];
+    if (noPasswordFiles.includes(filename)) {
+        instantLine("Töltés...", null);
+        // Wait 2 seconds then print error message in red
+        setTimeout(() => {
+        typeLine("A fájl jelenleg nem elérhető", null, "system-message");
+        resetPrompt();
+        }, 2000);
+    } else if (filename === validFile) {
+        currentFile = filename;
+        openState = 2;
+        const passPrompt = instantLine("Kérem adja meg a hozzáférési kódot: ");
+        createInlineInput(passPrompt, handlePasswordSubmit);
+        instantLine("-".repeat(40));
+    } else {
+        typeLine("A fájl nem található a rendszerben!", null, "system-message");
+        resetPrompt();
+    }
+    }
+
+    function handlePasswordSubmit(pass) {
+      if (pass === validPassword) {
+        instantLine(">> Hozzáférés engedélyezve a fájlhoz: " + currentFile);
+        if(currentFile === "9133966") {
+          // Show image popup
+          openImagePopup();
+        }
+        resetPrompt();
+      } else {
+        typeLine("Helytelen hozzáférési kód!", null, "system-message");
+        resetPrompt();
+      }
+    }
+
+    function resetPrompt() {
+      openState = 0;
+      inputLine.style.display = "flex";
+      input.focus();
+    }
+
+    function exitSystem() {
+      terminal.classList.add("hidden");
+      cornerLabel.style.display = "none";
+      passwordScreen.classList.remove("hidden");
+      enteredPassword = "";
+      updatePasswordDisplay();
+      output.innerHTML = "";
+      bootFinished = false;
+      openState = 0;
+      currentFile = "";
+      closeImagePopup();
+    }
+
+    // Image popup handlers
+    function openImagePopup() {
+      currentImageIndex = 0;
+      popupImage.src = images[currentImageIndex];
+      imagePopupOverlay.style.display = "flex";
+    }
+
+    function closeImagePopup() {
+      imagePopupOverlay.style.display = "none";
+      popupImage.src = "";
+    }
+
+    function showImage(index) {
+      if (index < 0) index = images.length - 1;
+      else if (index >= images.length) index = 0;
+      currentImageIndex = index;
+      popupImage.src = images[currentImageIndex];
+    }
+
+    prevBtn.onclick = () => {
+      showImage(currentImageIndex - 1);
+    };
+
+    nextBtn.onclick = () => {
+      showImage(currentImageIndex + 1);
+    };
+
+    closeBtn.onclick = () => {
+      closeImagePopup();
+    };
+  </script>
+</body>
+</html>
