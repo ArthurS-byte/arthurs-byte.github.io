@@ -331,15 +331,17 @@ function handleSystemCommand(command) {
   const action = parts[1];
 
   if (action === "circuit") {
-    const circuitStr = parts.slice(2).join(" ");
-    // Expected string exactly:
-    const validCircuit = "CFA CBA CKB FL2 FL1 BKJ ML1 MLF AAB AFM ATR";
-    if (circuitStr === validCircuit) {
-      typeLine("Sikeres áramkörkapcsolás'");
-      circuitSuccess = true;
-    } else {
-      typeLine("Ez az áramkör nem valósítható meg", null, "system-message");
-    }
+  const circuitStr = parts.slice(2).join(" ");
+  // Acceptable variants:
+  const validCircuit1 = "CFA CBA CKB FL2 FL1 BKJ ML1 MLF AAB AFM ATR";
+  const validCircuit2 = "CFA CBA CKB FL2 FL1 BKB ML1 MLF AAB AFM ATR";
+  if (circuitStr === validCircuit1 || circuitStr === validCircuit2) {
+    typeLine("Sikeres áramkörkapcsolás'");
+    circuitSuccess = true;
+  } else {
+    typeLine("Ez az áramkör nem valósítható meg", null, "system-message");
+  }
+
 
   } else if (action === "voltage") {
     const voltageStr = parts.slice(2).join(" ");
